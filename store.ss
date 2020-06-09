@@ -10,3 +10,5 @@
 
 (defmethod (look-up-facts (store <null>) (subject <t>) (predicate <t>) (object <t>))
   '())
+(defmethod (look-up-facts (store <pair>) (subject <t>) (predicate <t>) (object <t>))
+  store)
