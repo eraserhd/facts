@@ -12,14 +12,19 @@
 (defmethod (look-up-facts (store <null>) (subject <t>) (predicate <t>) (object <t>))
   '())
 (defmethod (look-up-facts (store <pair>) (subject <t>) (predicate <t>) (object <t>))
+  (def (matcher pattern)
+    (match pattern
+      (['equal? x] (lambda (v) (equal? x v)))
+      (_           (lambda (_) #t))))
+  (def matches-s? (matcher subject))
+  (def matches-p? (matcher predicate))
+  (def matches-o? (matcher object))
   (def (matches-value? value pattern)
     (match pattern
       (['equal? x] (equal? value x))
       (_           #t)))
-  (def (matches? fact)
-    (match fact
-      ([s p o] (and (matches-value? s subject)
-                    (matches-value? p predicate)
-                    (matches-value? o object)))
-      (_       #f)))
+  (def matches?
+    (match <>
+      ([(? matches-s?) (? matches-p?) (? matches-o?)] #t)
+      (_                                              #f)))
   (filter matches? store))
