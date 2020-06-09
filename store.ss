@@ -19,10 +19,6 @@
   (def matches-s? (matcher subject-filter))
   (def matches-p? (matcher predicate-filter))
   (def matches-o? (matcher object-filter))
-  (def (matches-value? value pattern)
-    (match pattern
-      (['equal? x] (equal? value x))
-      (_           #t)))
   (def matches?
     (match <>
       ([(? matches-s?) (? matches-p?) (? matches-o?)] #t)
