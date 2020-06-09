@@ -1,24 +1,24 @@
 (import :std/generic
         :std/misc/list)
-(export look-up-facts)
+(export retrieve-facts)
 
-(defgeneric look-up-facts
-  (lambda (store subject predicate object)
+(defgeneric retrieve-facts
+  (lambda (store subject-filter predicate-filter object-filter)
     (error (with-output-to-string
              (lambda ()
-               (display "look-up-facts is not implemented for ")
+               (display "retrieve-facts is not implemented for ")
                (display store))))))
 
-(defmethod (look-up-facts (store <null>) (subject <t>) (predicate <t>) (object <t>))
+(defmethod (retrieve-facts (store <null>) (subject-filter <t>) (predicate-filter <t>) (object-filter <t>))
   '())
-(defmethod (look-up-facts (store <pair>) (subject <t>) (predicate <t>) (object <t>))
+(defmethod (retrieve-facts (store <pair>) (subject-filter <t>) (predicate-filter <t>) (object-filter <t>))
   (def (matcher pattern)
     (match pattern
       (['equal? x] (lambda (v) (equal? x v)))
       (_           (lambda (_) #t))))
-  (def matches-s? (matcher subject))
-  (def matches-p? (matcher predicate))
-  (def matches-o? (matcher object))
+  (def matches-s? (matcher subject-filter))
+  (def matches-p? (matcher predicate-filter))
+  (def matches-o? (matcher object-filter))
   (def (matches-value? value pattern)
     (match pattern
       (['equal? x] (equal? value x))
