@@ -35,7 +35,11 @@
     (set! (hashed-fact-store-index self) index)))
 
 (defmethod (:retrieve-facts (store hashed-fact-store) (subject-filter <t>) (predicate-filter <t>) (object-filter <t>))
-  (def key [subject-filter predicate-filter object-filter])
+  (def (index-expression expr)
+    (match expr
+      (['equal? _] expr)
+      (_           #f)))
+  (def key (map index-expression [subject-filter predicate-filter object-filter]))
   (hash-ref (hashed-fact-store-index store) key '()))
 
 (def (retrieve-facts store subject-filter predicate-filter object-filter)

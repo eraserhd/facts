@@ -36,4 +36,6 @@
       (def db (make-hashed-fact-store facts))
       (check (hashed-fact-store? db) => #t)
       (check (sort-facts (:retrieve-facts db #f #f #f)) => (sort-facts facts))
-      (check (:retrieve-facts db #f '(equal? size:) #f) => [[1 size: 'small]]))))
+      (check (:retrieve-facts db #f '(equal? size:) #f) => [[1 size: 'small]])
+      (check (:retrieve-facts db '(equal? 2) '(equal? color:) #f) => [[2 color: 'red]])
+      (check (:retrieve-facts db '(equal? 2) '(equal? color:) '(unknown-pred 96)) => [[2 color: 'red]]))))
