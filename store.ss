@@ -1,4 +1,5 @@
 (import :std/generic
+        :std/iter
         :std/misc/list
         :std/srfi/9)
 (export :retrieve-facts
@@ -29,7 +30,11 @@
        (lambda (fact-list)
          (for-each
           (lambda (fact)
-            (hash-update! index '(#f #f #f) (cut cons fact <>) '()))
+            (with ([s p o] fact)
+              (for* ((s-pattern `(#f (equal? ,s)))
+                     (p-pattern `(#f (equal? ,p)))
+                     (o-pattern `(#f (equal? ,o))))
+                (hash-update! index (list s-pattern p-pattern o-pattern) (cut cons fact <>) '()))))
           fact-list))
        fact-lists))))
 
