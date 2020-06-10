@@ -1,5 +1,6 @@
 (import :std/test
         "store")
+(export store-test)
 
 (def store-test
   (test-suite "test :facts/store"
@@ -15,10 +16,3 @@
       (check (retrieve-facts db #f #f '(equal? red)) => [[2 color: 'red]])
       (check (retrieve-facts db '(equal? 1) '(equal? size:) '(equal? small)) => [[1 size: 'small]])
       (check (retrieve-facts db #f '(equal? size:) '(equal? big)) => '()))))
-
-(run-tests! store-test)
-(test-report-summary!)
-
-(case (test-result)
-  ((OK) (exit 0))
-  (else (exit 1)))
