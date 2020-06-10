@@ -14,7 +14,7 @@
                (display store))))))
 
 (defmethod (:retrieve-facts (store <null>) (subject-filter <t>) (predicate-filter <t>) (object-filter <t>))
-  '())
+  store)
 (defmethod (:retrieve-facts (store <pair>) (subject-filter <t>) (predicate-filter <t>) (object-filter <t>))
   store)
 
