@@ -1,6 +1,9 @@
 (import :std/generic
-        :std/misc/list)
-(export retrieve-facts)
+        :std/misc/list
+        :std/srfi/9)
+(export retrieve-facts
+        hashed-fact-store?
+        make-hashed-fact-store)
 
 (defgeneric retrieve-facts
   (lambda (store subject-filter predicate-filter object-filter)
@@ -24,3 +27,22 @@
       ([(? matches-s?) (? matches-p?) (? matches-o?)] #t)
       (_                                              #f)))
   (filter matches? store))
+
+(defstruct hashed-fact-store (index)
+  constructor: :init!)
+
+(defmethod {:init! hashed-fact-store}
+  (lambda (self . fact-lists)
+    (let (index (make-hash-table))
+      (set! (hashed-fact-store-index self) index)
+      (for-each
+       (lambda (fact-list)
+         (for-each
+          (lambda (fact)
+            (hash-update! index '(#f #f #f) (cut cons fact <>) '()))
+          fact-list))
+       fact-lists))))
+
+(defmethod (retrieve-facts (store hashed-fact-store) (subject-filter <t>) (predicate-filter <t>) (object-filter <t>))
+  (def key [subject-filter predicate-filter object-filter])
+  (hash-ref (hashed-fact-store-index store) key '()))
