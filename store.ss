@@ -1,7 +1,8 @@
 (import :std/generic
         :std/misc/list
         :std/srfi/9)
-(export retrieve-facts
+(export :retrieve-facts
+        retrieve-facts
         hashed-fact-store?
         make-hashed-fact-store)
 
