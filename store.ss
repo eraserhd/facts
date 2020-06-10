@@ -31,9 +31,9 @@
          (for-each
           (lambda (fact)
             (with ([s p o] fact)
-              (for* ((s-pattern `(#f (equal? ,s)))
-                     (p-pattern `(#f (equal? ,p)))
-                     (o-pattern `(#f (equal? ,o))))
+              (for* ((s-pattern (list #f `(equal? ,s)))
+                     (p-pattern (list #f `(equal? ,p)))
+                     (o-pattern (list #f `(equal? ,o))))
                 (hash-update! index (list s-pattern p-pattern o-pattern) (cut cons fact <>) '()))))
           fact-list))
        fact-lists))))
