@@ -25,14 +25,14 @@
 (defmethod {:init! hashed-fact-store}
   (lambda (self . fact-lists)
     (def index (make-hash-table))
-    (set! (hashed-fact-store-index self) index)
     (for* ((fact-list fact-lists)
            (fact fact-list))
       (with ([s p o] fact)
         (for* ((s-pattern (list #f `(equal? ,s)))
                (p-pattern (list #f `(equal? ,p)))
                (o-pattern (list #f `(equal? ,o))))
-          (hash-update! index (list s-pattern p-pattern o-pattern) (cut cons fact <>) '()))))))
+          (hash-update! index (list s-pattern p-pattern o-pattern) (cut cons fact <>) '()))))
+    (set! (hashed-fact-store-index self) index)))
 
 (defmethod (:retrieve-facts (store hashed-fact-store) (subject-filter <t>) (predicate-filter <t>) (object-filter <t>))
   (def key [subject-filter predicate-filter object-filter])
