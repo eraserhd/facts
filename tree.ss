@@ -10,7 +10,7 @@
             (else         "")))
     (and (<= 1 (string-length s))
          (char=? #\@ (string-ref s 0))))
-  
+
   (def (special-ref table k)
     (or (hash-ref table k #f)
         (hash-ref table (string->symbol k) #f)
@@ -18,12 +18,13 @@
 
   (def (table-id table)
     (special-ref table "@id"))
-  
+
   (def (key->attr k)
     (match k
       ((? string? s)  (string->keyword s))
       ((? symbol? s)  (string->keyword (symbol->string s)))
       ((? keyword? k) k)))
+
   (def (table->facts table)
     (def id (table-id table))
     (with-list-builder (put!)
@@ -32,5 +33,6 @@
          (when (not (special-key? k))
            (put! (list id (key->attr k) v))))
        table)))
+
   (match tree
     ((? hash-table?) (table->facts tree))))
