@@ -38,5 +38,4 @@
              (put! (list id (key->attr k) v)))))
        table)))
 
-  (match tree
-    ((? hash-table?) (table->facts tree))))
+  (table->facts tree))
