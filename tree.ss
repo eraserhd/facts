@@ -30,12 +30,11 @@
     (with-list-builder (put!)
       (hash-for-each
        (lambda (k v)
+         (def vs (if (list? v) v [v]))
          (when (not (special-key? k))
-           (if (list? v)
-             (for-each (lambda (v)
-                         (put! (list id (key->attr k) v)))
-                       v)
-             (put! (list id (key->attr k) v)))))
+           (for-each (lambda (v)
+                       (put! (list id (key->attr k) v)))
+                     vs)))
        table)))
 
   (table->facts tree))
