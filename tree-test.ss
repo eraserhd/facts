@@ -6,5 +6,6 @@
 (def tree-test
   (test-suite "test :facts/tree"
     (test-case "tree->facts"
-      (displayln (tree->facts (hash ("@id" 1) ("color" "red"))))
-      (check (tree->facts (hash ("@id" 1) ("color" "red"))) => '((1 color: "red"))))))
+      (check (tree->facts (hash ("@id" 42) ("color" "red"))) => '((42 color: "red")))
+      (check (tree->facts (hash (@id 42) (color "red"))) => '((42 color: "red"))))))
+

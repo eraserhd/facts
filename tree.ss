@@ -3,16 +3,18 @@
 
 (def (tree->facts tree)
   (def (table-id table)
-    (hash-ref table "@id"))
+    (or (hash-ref table "@id" #f)
+        (hash-ref table '@id #f)))
   (def (key->attr k)
     (match k
-      ((? string? s) (string->keyword s))))
+      ((? string? s) (string->keyword s))
+      ((? symbol? s) (string->keyword (symbol->string s)))))
   (def (table->facts table)
     (def id (table-id table))
     (with-list-builder (put!)
       (hash-for-each
        (lambda (k v)
-         (when (not (equal? "@id" k))
+         (when (and (not (equal? "@id" k)) (not (eq? '@id k)))
            (put! (list id (key->attr k) v))))
        table)))
   (match tree
