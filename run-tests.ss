@@ -1,7 +1,8 @@
 (import :std/test
-        "store-test")
+        "store-test"
+        "tree-test")
 
-(run-tests! store-test)
+(run-tests! store-test tree-test)
 (test-report-summary!)
 
 (case (test-result)
