@@ -31,7 +31,11 @@
       (hash-for-each
        (lambda (k v)
          (when (not (special-key? k))
-           (put! (list id (key->attr k) v))))
+           (if (list? v)
+             (for-each (lambda (v)
+                         (put! (list id (key->attr k) v)))
+                       v)
+             (put! (list id (key->attr k) v)))))
        table)))
 
   (match tree
