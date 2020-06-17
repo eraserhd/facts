@@ -2,11 +2,6 @@
 (export tree->facts)
 
 (def (tree->facts tree)
-  (def (table-id table)
-    (or (hash-ref table "@id" #f)
-        (hash-ref table '@id #f)
-        (hash-ref table @id: #f)))
-  
   (def (special-key? k)
     (def s (cond
             ((symbol? k)  (symbol->string k))
@@ -15,7 +10,15 @@
             (else         "")))
     (and (<= 1 (string-length s))
          (char=? #\@ (string-ref s 0))))
+  
+  (def (special-ref table k)
+    (or (hash-ref table k #f)
+        (hash-ref table (string->symbol k) #f)
+        (hash-ref table (string->keyword k) #f)))
 
+  (def (table-id table)
+    (special-ref table "@id"))
+  
   (def (key->attr k)
     (match k
       ((? string? s)  (string->keyword s))
