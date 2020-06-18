@@ -25,7 +25,7 @@
       ((? symbol? s)  (string->keyword (symbol->string s)))
       ((? keyword? k) k)))
 
-  (def (table->facts table)
+  (def (process-hash table)
     (def id (table-id table))
     (with-list-builder (put!)
       (hash-for-each
@@ -37,4 +37,4 @@
                      vs)))
        table)))
 
-  (table->facts tree))
+  (process-hash tree))
