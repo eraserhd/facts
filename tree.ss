@@ -27,15 +27,20 @@
          ((? symbol? s)  (string->keyword (symbol->string s)))
          ((? keyword? k) k)))
 
+     (def (process x)
+       (if (hash-table? x)
+         (process-hash x)
+         x))
+
      (def (process-hash table)
        (def id (table-id table))
        (hash-for-each
         (lambda (k v)
-          (def vs (if (list? v) v [v]))
           (when (not (special-key? k))
-            (for-each (lambda (v)
-                        (put-fact! (list id (key->attr k) v)))
-                      vs)))
+            (let (vs (map process (if (list? v) v [v])))
+              (for-each (lambda (v)
+                          (put-fact! (list id (key->attr k) v)))
+                        vs))))
         table)
        id)
 
