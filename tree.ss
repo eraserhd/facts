@@ -25,16 +25,18 @@
       ((? symbol? s)  (string->keyword (symbol->string s)))
       ((? keyword? k) k)))
 
-  (def (process-hash table)
+  (def (process-hash put-fact! table)
     (def id (table-id table))
-    (with-list-builder (put!)
-      (hash-for-each
-       (lambda (k v)
-         (def vs (if (list? v) v [v]))
-         (when (not (special-key? k))
-           (for-each (lambda (v)
-                       (put! (list id (key->attr k) v)))
-                     vs)))
-       table)))
+    (hash-for-each
+     (lambda (k v)
+       (def vs (if (list? v) v [v]))
+       (when (not (special-key? k))
+         (for-each (lambda (v)
+                     (put-fact! (list id (key->attr k) v)))
+                   vs)))
+     table)
+    id)
 
-  (process-hash tree))
+  (call-with-list-builder
+   (lambda (put-fact! _)
+     (process-hash put-fact! tree))))
